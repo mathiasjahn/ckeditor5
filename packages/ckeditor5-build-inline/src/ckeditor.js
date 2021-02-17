@@ -16,10 +16,10 @@ import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import Image from '@ckeditor/ckeditor5-image/src/image';
-import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
 import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
+import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
@@ -28,7 +28,16 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
-import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
+import SuperScript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+import SubScript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import FontSize from '@ckeditor/ckeditor5-font/src/fontsize';
+import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
+import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
+import MathType from '@wiris/mathtype-ckeditor5/src/plugin';
+import Placeholder from "ckeditor5-placeholder";
+import PageBreak from '@ckeditor/ckeditor5-page-break/src/pagebreak';
+
+
 
 export default class InlineEditor extends InlineEditorBase {}
 
@@ -39,24 +48,31 @@ InlineEditor.builtinPlugins = [
 	Autoformat,
 	Bold,
 	Italic,
+	SuperScript,
+	SubScript,
 	BlockQuote,
 	CKFinder,
 	EasyImage,
 	Heading,
 	Image,
-	ImageCaption,
 	ImageStyle,
 	ImageToolbar,
 	ImageUpload,
+	ImageResize,
 	Indent,
-	Link,
 	List,
 	MediaEmbed,
 	Paragraph,
+	SimpleUploadAdapter,
 	PasteFromOffice,
 	Table,
 	TableToolbar,
-	TextTransformation
+	Alignment,
+	Link,
+	FontSize,
+	// MathType,
+	PageBreak,
+	Placeholder,
 ];
 
 // Editor configuration.
@@ -65,11 +81,13 @@ InlineEditor.defaultConfig = {
 		items: [
 			'heading',
 			'|',
+			'alignment',
 			'bold',
 			'italic',
-			'link',
 			'bulletedList',
 			'numberedList',
+			'|',
+			'link',
 			'|',
 			'indent',
 			'outdent',
@@ -77,15 +95,28 @@ InlineEditor.defaultConfig = {
 			'imageUpload',
 			'blockQuote',
 			'insertTable',
-			'mediaEmbed',
 			'undo',
-			'redo'
+			'redo',
+			'pageBreak',
+			'placeholder'
 		]
 	},
+	simpleUpload: {
+		uploadUrl: '/rte/upload'
+	},
 	image: {
+		// Configure the available styles.
+		styles: [
+			'alignLeft', 'alignCenter', 'alignRight'
+		],
+		resizeUnit: 'px',
+
+		// You need to configure the image toolbar, too, so it shows the new style
+		// buttons as well as the resize buttons.
 		toolbar: [
-			'imageStyle:full',
-			'imageStyle:side',
+			'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight',
+			'|',
+			'imageResize',
 			'|',
 			'imageTextAlternative'
 		]
@@ -97,6 +128,26 @@ InlineEditor.defaultConfig = {
 			'mergeTableCells'
 		]
 	},
+	placeholderProps: {
+		types: [
+			'Emne',
+			'Formål',
+			'Forudsætninger - tjekliste',
+			'Forudsætninger - test',
+			'Testbeskrivelse',
+			'Acceptkriterium',
+			'Deltagere',
+			'Ansvarlige',
+			'Milepæl',
+			'Oprettet af',
+			'Oprettet den',
+			'Godkendt af',
+			'Godkendt den',
+			'Udførelsesdato',
+			'Tilknyttede krav',
+			'Tjekliste'
+		]
+	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
-	language: 'en'
+	language: 'da'
 };
